@@ -9,11 +9,10 @@ public class InventoryManager : MonoBehaviour
 
     private void Awake()
     {
-        // If there is an instance, and it's not me, delete myself.
-
+        // Se já existe uma instância, e não sou eu mesmo, destruo-me.
         if (Instance != null && Instance != this)
         {
-            Destroy(this);
+            Destroy(this.gameObject);
         }
         else
         {
@@ -23,57 +22,53 @@ public class InventoryManager : MonoBehaviour
 
     public GameObject inv_background;
     public GameObject inv_slot;
-
-
-
     public List<Item> inventoryItems = new List<Item>();
-        public int maxInventorySlots = 5;
+    public int maxInventorySlots = 5;
 
-    public bool AddItem(Item newItem)
-    {
-        if (inventoryItems.Count < maxInventorySlots)
-        {
-            inventoryItems.Add(newItem);
-            return true;
-        }
-        else
-        {
-            Debug.Log("Inventário cheio! Não é possível adicionar mais itens.");
-            return false;
-        }
-    }
+    private List<GameObject> _instantiatedSlots;
 
-
-
-    // Start is called before the first frame update
     void Start()
     {
+        // Inicializa a lista de slots instanciados
+        _instantiatedSlots = new List<GameObject>();
         RefreshInventory();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     void RefreshInventory()
     {
-        int hotkey = 1;
-        foreach (Item itemLoop in inventoryItems)
+        // Destrói os slots existentes
+        for (int i = _instantiatedSlots.Count - 1; i >= 0; i--)
+        {
+            Destroy(_instantiatedSlots[i].gameObject);
+        }
+
+        // Limpa a lista de slots instanciados
+        _instantiatedSlots.Clear();
+
+        // Re-instancia os slots e adiciona na lista
+        foreach (Item inventoryItem in inventoryItems)
         {
             GameObject slot_instance = Instantiate(inv_slot, inv_background.transform);
-            slot_instance.GetComponentInChildren<Image>().sprite = itemLoop.itemIcon;
-            slot_instance.GetComponentInChildren<Text>().text = itemLoop.itemName;
-            slot_instance.name = hotkey.ToString();
-            hotkey++;
-
+            slot_instance.GetComponentInChildren<Image>().sprite = inventoryItem.itemIcon;
+            slot_instance.GetComponentInChildren<Text>().text = inventoryItem.itemName;
+            _instantiatedSlots.Add(slot_instance);
         }
     }
 
-
-    void SelectSlot(int hotkey)
+    public bool AddItem(Item newItem)
+{
+    if (inventoryItems.Count < maxInventorySlots)
     {
-        Item selected_item = inventoryItems[hotkey - 1];
+        inventoryItems.Add(newItem);
+        RefreshInventory(); // Atualize a UI do inventário após adicionar o item
+        return true;
+    }
+    else
+    {
+        Debug.Log("Inventário cheio! Não é possível adicionar mais itens.");
+        return false;
     }
 }
+
+}
+
