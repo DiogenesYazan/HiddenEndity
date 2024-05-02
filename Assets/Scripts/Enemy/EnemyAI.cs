@@ -4,6 +4,7 @@ using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Animations;
+using UnityEngine.SceneManagement;
 
 public class Monster : MonoBehaviour
 {
@@ -108,16 +109,25 @@ public class Monster : MonoBehaviour
 
         return navHit.position;
     }
-
+    public GameObject Jumpscare;
     private void OnTriggerStay(Collider other) {
         if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Colidiu com o trigger do inimigo");
+            Jumpscare.SetActive(true);
             nav.isStopped = true;
             isWandering = false;
-            animator.SetBool("Attack", true);
+
+            StartCoroutine(LoadSceneAfterSeconds(2));
         }
     }
+
+
+    IEnumerator LoadSceneAfterSeconds(int sceneIndex)
+    {
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene(sceneIndex);
+    }
+
    
 }
 

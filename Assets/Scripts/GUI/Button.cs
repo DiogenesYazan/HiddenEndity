@@ -16,7 +16,7 @@ public class Button : MonoBehaviour
 
     }
     public void play(){
-        panel_play.SetActive(true);
+        SceneManager.LoadScene(2);
     }
     public void config(){
         panel_config.SetActive(true);

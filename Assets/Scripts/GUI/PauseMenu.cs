@@ -11,13 +11,10 @@ public class PauseMenu : MonoBehaviour
     public GameObject Camera;
     public StarterAssetsInputs Inputs;
     private bool isPaused = false;
-    public GameObject PnlMap;
     public GameObject PnlSure;
     public GameObject InventaryMenu;
     public GameObject Config;
     public GameObject Btn;
-    public GameObject GroundFloor;
-    public GameObject FloorFirst;
 
     void Start()
     {
@@ -58,10 +55,6 @@ public class PauseMenu : MonoBehaviour
         Btn.SetActive(true);
     }
 
-    public void MapButton() {
-        PnlMap.SetActive(!PnlMap.activeSelf);
-    }
-
     public void inventoryButton() {
         Btn.SetActive(false);
         InventaryMenu.SetActive(!InventaryMenu.activeSelf);
@@ -76,23 +69,11 @@ public class PauseMenu : MonoBehaviour
     }
 
     public void backButton() {
-        PnlMap.SetActive(false);
         PnlSure.SetActive(false);
         InventaryMenu.SetActive(false);
         Config.SetActive(false);
     }
-
-    public void mapGroundButton() {
-        GroundFloor.SetActive(!GroundFloor.activeSelf);
-    }
-
-    public void mapFirstButton() {
-        FloorFirst.SetActive(!FloorFirst.activeSelf);
-    }
     
-    public void menuButton() {
-        SceneManager.LoadScene(1);
-    }
 
     public void sureButton() {
         PnlSure.SetActive(false);
